@@ -2,7 +2,6 @@
     "x":0,
     "type":"Scene",
     "selectedBox":2,
-    "selecteID":5,
     "searchKey":"Scene,mainUI",
     "props":{"width":640,"sceneColor":"#000000","runtime":"scripts/MainUI.ts","name":"mainUI","height":1136,"autoDestroyAtClosed":true},
     "nodeParent":-1,

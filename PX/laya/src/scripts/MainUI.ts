@@ -26,7 +26,7 @@ import GlowFilter = Laya.GlowFilter;
         this.hourse.pos(100, 750);
         this.hourse.on(Laya.Event.MOUSE_OUT, this, this.OnFocusOff, [this.hourse]);
         this.hourse.on(Laya.Event.MOUSE_OVER, this, this.OnFocusOn, [this.hourse]);
-        this.hourse.on(Laya.Event.MOUSE_UP, this, this.OnHourseClick, [this.hourse]);
+        this.hourse.on(Laya.Event.CLICK, this, this.OnHourseClick, [this.hourse]);
     }
     private GlowFilter(hourse:Laya.Sprite, bShowGlow:Boolean): void {
         if (bShowGlow)
@@ -49,7 +49,7 @@ import GlowFilter = Laya.GlowFilter;
         this.GlowFilter(sp, true);
     }
     OnHourseClick(sp:Laya.Sprite) {
-
+        Laya.Scene.open("HouseScene.scene")
     }
     OnLoadBgCompleted():void {
         this.maxLeftX = GameConfig.width - this.bg.width;
@@ -80,6 +80,7 @@ import GlowFilter = Laya.GlowFilter;
         }
         else
         {
+            return;
             var deltaX:number = Laya.stage.mouseX - this.lastX;
             var deltaY:number = Laya.stage.mouseY - this.lastY;
             this.bg.x = this.bg.x + deltaX;

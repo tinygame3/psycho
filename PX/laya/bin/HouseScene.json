@@ -1,0 +1,1 @@
+{"type":"Scene","props":{"width":640,"runtime":"scripts/HouseUI.ts","name":"houseScene","height":1136},"compId":2,"child":[{"type":"Button","props":{"y":0,"x":512,"var":"btlReturn","skin":"comp/button.png","name":"btlReturnrn","label":"返回"},"compId":4},{"type":"Label","props":{"y":10,"x":5,"text":"西厢房","fontSize":55},"compId":7}],"loadList":["comp/button.png"],"loadList3D":[]}
