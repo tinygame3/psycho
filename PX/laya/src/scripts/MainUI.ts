@@ -1,34 +1,25 @@
 import GameConfig from "../GameConfig";
 import GlowFilter = Laya.GlowFilter;
+import MainMap from "./MainMap";
+import WorldMap from "./WorldMap";
   export default class MainUI extends Laya.Scene {
-    private bg:Laya.Sprite;
+
     public btlHouse:Laya.Button;
     public btlWorld:Laya.Button;
     public btlFriends:Laya.Button;
 
-    private maxLeftX: number = 0;
-    private maxTopY: number = 0;
+    public maxLeftX: number = 0;
+    public maxTopY: number = 0;
     public bStop:boolean = false;
     public static curScene:MainUI;
+    private curMap:Laya.Sprite;
     constructor() { 
         super();
         this.init();
     }
     
-    private hourse:Laya.Sprite;
-    init():void{
-        this.bg = new Laya.Sprite()
-        this.bg.loadImage("res/bg/bg_newyear.png", Laya.Handler.create(this, this.OnLoadBgCompleted));
-        this.addChild(this.bg);
-        this.bg.pos(0, 0);
 
-        this.hourse = new Laya.Sprite()
-        this.hourse.loadImage("res/item/win_164.png");
-        this.addChild(this.hourse);
-        this.hourse.pos(100, 750);
-        this.hourse.on(Laya.Event.MOUSE_OUT, this, this.OnFocusOff, [this.hourse]);
-        this.hourse.on(Laya.Event.MOUSE_OVER, this, this.OnFocusOn, [this.hourse]);
-        this.hourse.on(Laya.Event.CLICK, this, this.OnHourseClick, [this.hourse]);
+    init():void{
         MainUI.curScene = this;
     }
     onEnable(): void {
@@ -37,54 +28,19 @@ import GlowFilter = Laya.GlowFilter;
         this.btlFriends.on(Laya.Event.CLICK, this, this.onFriendsClick);
         Laya.stage.on(Laya.Event.MOUSE_MOVE, this, this.OnMouseMove);
         Laya.stage.on(Laya.Event.MOUSE_OUT, this, this.OnMouseEnd);
-        Laya.timer.frameLoop(1, this, this.onUpdate);
+        //Laya.timer.frameLoop(1, this, this.onUpdate);
+        this.switchMap(1);
     }
     onDisable(): void{
-        Laya.timer.clear(this, this.onUpdate);
+        //Laya.timer.clear(this, this.onUpdate);
     }
     onUpdate(): void{
         //this.hourse.pos(100 + this.bgX, 750 + this.bgY);
         //this.bg.x = this.bgX;
         //this.bg.y = this.bgY;
-        console.log(this.bg.x)
+        //console.log(this.bg.x)
     }
 
-    private GlowFilter(hourse:Laya.Sprite, bShowGlow:Boolean): void {
-        if (bShowGlow)
-        {
-            //创建一个发光滤镜
-            var glowFilter: Laya.GlowFilter = new Laya.GlowFilter("#ffff00", 10, 0, 0);
-            //设置滤镜集合为发光滤镜
-            hourse.filters = [glowFilter];
-        }
-        else
-        {
-            hourse.filters = [];
-        }
-
-    }
-    OnFocusOff(sp:Laya.Sprite):void {
-        this.GlowFilter(sp, false);
-    }
-    OnFocusOn(sp:Laya.Sprite):void {
-        this.GlowFilter(sp, true);
-    }
-    OnHourseClick(sp:Laya.Sprite) {
-        this.bStop = true;
-        Laya.Scene.open("HouseScene.scene", false);
-    }
-    OnLoadBgCompleted():void {
-        this.maxLeftX = GameConfig.width - this.bg.width;
-        if (this.maxLeftX > 0)
-        {
-            this.maxLeftX = 0;
-        }
-        this.maxTopY = GameConfig.height - this.bg.height;
-        if (this.maxTopY > 0)
-        {
-            this.maxTopY = 0;
-        }
-    }
 
     private lastX:number = null;
     private lastY:number = null;
@@ -104,28 +60,28 @@ import GlowFilter = Laya.GlowFilter;
             //return;
             var deltaX:number = Laya.stage.mouseX - this.lastX;
             var deltaY:number = Laya.stage.mouseY - this.lastY;
-            this.bg.x = this.bg.x + deltaX;
-            this.bg.y = this.bg.x + deltaY;
-            this.bgX = this.bg.x;
-            this.bgY = this.bg.y;
+            this.curMap.x = this.curMap.x + deltaX;
+            this.curMap.y = this.curMap.x + deltaY;
+            this.bgX = this.curMap.x;
+            this.bgY = this.curMap.y;
             
-            if (this.bg.x > 0)
+            if (this.curMap.x > 0)
             {
-                this.bg.x = 0;
+                this.curMap.x = 0;
             }
-            if (this.bg.y > 0)
+            if (this.curMap.y > 0)
             {
-                this.bg.y = 0;
+                this.curMap.y = 0;
             }
-            if (this.bg.x < this.maxLeftX)
+            if (this.curMap.x < this.maxLeftX)
             {
-                this.bg.x = this.maxLeftX;
+                this.curMap.x = this.maxLeftX;
             }
-            if (this.bg.y < this.maxTopY)
+            if (this.curMap.y < this.maxTopY)
             {
-                this.bg.y = this.maxTopY;
+                this.curMap.y = this.maxTopY;
             }
-            this.hourse.pos(100 + this.bg.x, 750 + this.bg.y);
+            //
         }
         this.lastX = Laya.stage.mouseX;
         this.lastY = Laya.stage.mouseY;
@@ -135,12 +91,34 @@ import GlowFilter = Laya.GlowFilter;
         this.lastY = null;
     }
     onHouseClick(e: Laya.Event):void{
-        this.btlHouse.label = "pressed";
+        //this.btlHouse.label = "pressed";
+        this.switchMap(1);
     }
     onWorldClick(e: Laya.Event):void{
-        this.btlWorld.label = "pressed";
+        this.switchMap(2);
     }
     onFriendsClick(e: Laya.Event):void{
-        this.btlFriends.label = "pressed";
+        //this.btlFriends.label = "pressed";
+    }
+    switchMap(index:number):void{
+        this.btlHouse.selected = false;
+        this.btlWorld.selected = false;
+        this.btlFriends.selected = false;
+        this.removeChild(this.curMap);
+        if (index == 1)
+        {
+            this.btlHouse.selected = true;        
+            this.curMap = new MainMap(this);
+        }
+        if (index == 2)
+        {
+            this.curMap = new WorldMap(this);
+            this.btlWorld.selected = true;
+        }
+        if (index == 3)
+        {
+            this.btlFriends.selected = true;
+        }
+        this.addChildAt(this.curMap, 0);
     }
 }
