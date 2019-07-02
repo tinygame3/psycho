@@ -1,5 +1,6 @@
 import GameConfig from "./GameConfig";
 class Main {
+	static mainScene:Laya.Scene = null;
 	constructor() {
 		//根据IDE设置初始化引擎		
 		if (window["Laya3D"]) Laya3D.init(GameConfig.width, GameConfig.height);

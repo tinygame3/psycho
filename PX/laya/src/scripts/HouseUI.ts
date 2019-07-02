@@ -1,5 +1,6 @@
 import GameConfig from "../GameConfig";
 import GlowFilter = Laya.GlowFilter;
+import MainUI from "../scripts/MainUI";
   export default class HouseUI extends Laya.Scene {
     private bg:Laya.Sprite;
     public btlReturn:Laya.Button;
@@ -12,12 +13,13 @@ import GlowFilter = Laya.GlowFilter;
     
     private hourse:Laya.Sprite;
     init():void{
-        this.bg = new Laya.Sprite()
+        this.autoDestroyAtClosed = true;
+        this.bg = new Laya.Sprite();
         this.bg.loadImage("res/bg/bg_newyear.png");
         this.addChild(this.bg);
         this.bg.pos(0, 0);
 
-        this.hourse = new Laya.Sprite()
+        this.hourse = new Laya.Sprite();
         this.hourse.loadImage("res/item/win_165.png");
         this.addChild(this.hourse);
         this.hourse.pos(100, 750);
@@ -26,7 +28,7 @@ import GlowFilter = Laya.GlowFilter;
         this.btlReturn.on(Laya.Event.CLICK, this, this.onReturn);
     }
     onReturn():void {
-        Laya.Scene.close("HouseScene.scene");
-        Laya.Scene.open("MainScene.scene");
+        Laya.Scene.close("HouseScene.scene", "houseScene");
+        MainUI.curScene.bStop = false;
     }
 }

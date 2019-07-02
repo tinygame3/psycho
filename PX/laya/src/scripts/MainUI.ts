@@ -8,6 +8,8 @@ import GlowFilter = Laya.GlowFilter;
 
     private maxLeftX: number = 0;
     private maxTopY: number = 0;
+    public bStop:boolean = false;
+    public static curScene:MainUI;
     constructor() { 
         super();
         this.init();
@@ -27,7 +29,26 @@ import GlowFilter = Laya.GlowFilter;
         this.hourse.on(Laya.Event.MOUSE_OUT, this, this.OnFocusOff, [this.hourse]);
         this.hourse.on(Laya.Event.MOUSE_OVER, this, this.OnFocusOn, [this.hourse]);
         this.hourse.on(Laya.Event.CLICK, this, this.OnHourseClick, [this.hourse]);
+        MainUI.curScene = this;
     }
+    onEnable(): void {
+        this.btlHouse.on(Laya.Event.CLICK, this, this.onHouseClick);
+        this.btlWorld.on(Laya.Event.CLICK, this, this.onWorldClick);
+        this.btlFriends.on(Laya.Event.CLICK, this, this.onFriendsClick);
+        Laya.stage.on(Laya.Event.MOUSE_MOVE, this, this.OnMouseMove);
+        Laya.stage.on(Laya.Event.MOUSE_OUT, this, this.OnMouseEnd);
+        Laya.timer.frameLoop(1, this, this.onUpdate);
+    }
+    onDisable(): void{
+        Laya.timer.clear(this, this.onUpdate);
+    }
+    onUpdate(): void{
+        //this.hourse.pos(100 + this.bgX, 750 + this.bgY);
+        //this.bg.x = this.bgX;
+        //this.bg.y = this.bgY;
+        console.log(this.bg.x)
+    }
+
     private GlowFilter(hourse:Laya.Sprite, bShowGlow:Boolean): void {
         if (bShowGlow)
         {
@@ -49,7 +70,8 @@ import GlowFilter = Laya.GlowFilter;
         this.GlowFilter(sp, true);
     }
     OnHourseClick(sp:Laya.Sprite) {
-        Laya.Scene.open("HouseScene.scene")
+        this.bStop = true;
+        Laya.Scene.open("HouseScene.scene", false);
     }
     OnLoadBgCompleted():void {
         this.maxLeftX = GameConfig.width - this.bg.width;
@@ -63,28 +85,29 @@ import GlowFilter = Laya.GlowFilter;
             this.maxTopY = 0;
         }
     }
-    onEnable(): void {
-        this.btlHouse.on(Laya.Event.CLICK, this, this.onHouseClick);
-        this.btlWorld.on(Laya.Event.CLICK, this, this.onWorldClick);
-        this.btlFriends.on(Laya.Event.CLICK, this, this.onFriendsClick);
-        Laya.stage.on(Laya.Event.MOUSE_MOVE, this, this.OnMouseMove);
-        Laya.stage.on(Laya.Event.MOUSE_OUT, this, this.OnMouseEnd);
-    }
+
     private lastX:number = null;
     private lastY:number = null;
 
+    private bgX:number = 0;
+    private bgY:number = 0;
     OnMouseMove(): void {
+        if (this.bStop) {
+            return;
+        }
         if (this.lastX == null || this.lastY == null)
         {
 
         }
         else
         {
-            return;
+            //return;
             var deltaX:number = Laya.stage.mouseX - this.lastX;
             var deltaY:number = Laya.stage.mouseY - this.lastY;
             this.bg.x = this.bg.x + deltaX;
             this.bg.y = this.bg.x + deltaY;
+            this.bgX = this.bg.x;
+            this.bgY = this.bg.y;
             
             if (this.bg.x > 0)
             {

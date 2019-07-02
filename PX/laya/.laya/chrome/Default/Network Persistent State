@@ -1,1 +1,1 @@
-{"net":{"http_server_properties":{"servers":[{"https://beacons.gcp.gvt2.com":{"supports_spdy":true}}],"version":5},"network_qualities":{"CAISBDExMTEYgICAgPj/////AQ==":"3G"}}}
+{"net":{"http_server_properties":{"servers":[{"https://beacons.gcp.gvt2.com":{"alternative_service":[{"advertised_versions":[46],"expiration":"13209148543981445","port":443,"protocol_str":"quic"}],"supports_spdy":true}}],"version":5},"network_qualities":{"CAISBDExMTEYgICAgPj/////AQ==":"4G"}}}
